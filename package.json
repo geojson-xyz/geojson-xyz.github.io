@@ -1,0 +1,31 @@
+{
+  "name": "geojson.xyz",
+  "version": "1.0.0",
+  "description": "just get that geojson",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/geojson-xyz/geojson.xyz.git"
+  },
+  "keywords": [
+    "geojson",
+    "please",
+    "xyz",
+    "data",
+    "metadata"
+  ],
+  "author": "Tom MacWright",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/geojson-xyz/geojson.xyz/issues"
+  },
+  "homepage": "https://github.com/geojson-xyz/geojson.xyz#readme",
+  "dependencies": {
+    "geojson-xyz-data": "^1.0.3",
+    "handlebars": "^4.0.3",
+    "pretty-bytes": "^2.0.1"
+  }
+}

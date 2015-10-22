@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>geojson.xyz</title>
+  <meta charset="utf-8" />
+  <meta title="description" content="just get the geojson" />
+  <meta title="author" content="Tom MacWright" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link href="http://d2v52k3cl9vedd.cloudfront.net/basscss/7.0.4/basscss.min.css" rel="stylesheet">
+  <link href="http://fonts.googleapis.com/css?family=Lato" rel="stylesheet" type="text/css">
+</head>
+<body>
+
+<div class='px2 bg-black overflow-hidden'>
+  <div class='container'>
+    <h2 class='mt1 white'>geojson.xyz</h2>
+  </div>
+</div>
+<div class='px2 overflow-hidden'>
+  <div class='container py2 px2'>
+    <a class='code white btn btn-primary px1 py1 bg-blue' href='https://github.com/geojson-xyz/geojson-xyz'>npm install geojson-xyz</a>
+  </div>
+</div>
+
+<div class='container px2 py1 overflow-hidden'>
+{{#each metadata}}
+{{#with meta}}
+  <h1>{{attribution}}</h1>
+  <p><a href='{{website}}'>{{website}}</a> {{license}}</p>
+{{/with}}
+<table class='table-light'>
+  <thead>
+    <tr>
+      <td colspan=5></td>
+   </tr>
+  </thead>
+
+  {{#each files}}
+    <tr>
+      <th><h2>{{@key}}</h2></th>
+      <td colspan=4></td>
+    </tr>
+    {{#each .}}
+      <tr>
+        <th>{{@key}}</th>
+        <td colspan=4></td>
+      </tr>
+      {{#each .}}
+        <tr>
+          <td></td>
+          <td>
+            <a download='{{name}}' href='{{url}}'>{{name}}</a>
+          </td>
+          <td>
+            {{summary}}
+          </td>
+          <td>
+            {{size}}
+          </td>
+          <td>
+            <a
+              title='open in geojson.io'
+              href='{{geojsonio}}'>.io</a>
+          </td>
+        </tr>
+      {{/each}}
+    {{/each}}
+  {{/each}}
+</table>
+{{/each}}
+</div>
+
+</body>
+</html>
