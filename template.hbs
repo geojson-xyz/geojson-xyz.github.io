@@ -2,73 +2,148 @@
 <html>
 <head>
   <title>geojson.xyz</title>
-  <meta charset="utf-8" />
-  <meta title="description" content="just get the geojson" />
-  <meta title="author" content="Tom MacWright" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <link href="http://d2v52k3cl9vedd.cloudfront.net/basscss/7.0.4/basscss.min.css" rel="stylesheet">
-  <link href="http://fonts.googleapis.com/css?family=Lato" rel="stylesheet" type="text/css">
+  <meta charset='utf-8' />
+  <meta title='description' content='just get the geojson' />
+  <meta title='author' content='Tom MacWright' />
+  <meta name='viewport' content='width=device-width,initial-scale=1' />
+  <script src='https://api.mapbox.com/mapbox.js/v2.2.3/mapbox.js'></script>
+  <link href='https://api.mapbox.com/mapbox.js/v2.2.3/mapbox.css' rel='stylesheet' />
+  <link href='https://fonts.googleapis.com/css?family=Roboto:400,700,500' rel='stylesheet' type='text/css'>
+  <link href='http://d2v52k3cl9vedd.cloudfront.net/basscss/7.0.4/basscss.min.css' rel='stylesheet'>
+  <style>
+  body, h1, h2, h3 { font-family: 'Roboto', sans-serif; }
+  td:first-child {
+    padding-left:0;
+    padding-right:0;
+  }
+  .row:hover {
+    cursor: pointer;
+    background: #eee;
+  }
+  svg {
+    max-height: none !important;
+  }
+  .mapbox-map {
+    height: 300px;
+  }
+  </style>
 </head>
 <body>
-
-<div class='px2 bg-black overflow-hidden'>
-  <div class='container'>
-    <h2 class='mt1 white'>geojson.xyz</h2>
+<div class='container px2 overflow-hidden'>
+  <div class='border-bottom'>
+    <h1>
+      geojson.xyz</a>
+    </h1>
+    <p>
+      A simple,
+      <a href='https://github.com/geojson-xyz'>open source</a>
+      website, CDN, and <a href='https://github.com/geojson-xyz/geojson-xyz'>CLI utility</a>
+      for the fast access of GeoJSON data for web mapping examples and
+      experiments.
+    </p>
   </div>
-</div>
-<div class='px2 overflow-hidden'>
-  <div class='container py2 px2'>
-    <a class='code white btn btn-primary px1 py1 bg-blue' href='https://github.com/geojson-xyz/geojson-xyz'>npm install geojson-xyz</a>
-  </div>
-</div>
-
-<div class='container px2 py1 overflow-hidden'>
-{{#each metadata}}
-{{#with meta}}
-  <h1>{{attribution}}</h1>
-  <p><a href='{{website}}'>{{website}}</a> {{license}}</p>
-{{/with}}
-<table class='table-light'>
-  <thead>
-    <tr>
-      <td colspan=5></td>
-   </tr>
-  </thead>
-
-  {{#each files}}
-    <tr>
-      <th><h2>{{@key}}</h2></th>
-      <td colspan=4></td>
-    </tr>
-    {{#each .}}
-      <tr>
-        <th>{{@key}}</th>
-        <td colspan=4></td>
+  <div class='py1'>
+  {{#each metadata}}
+  {{#with meta}}
+    <h3><a href='{{website}}'>{{attribution}}</a> ({{license}})</h3>
+  {{/with}}
+  <table class='table-light'>
+    {{#each files}}
+      <tr class='row' data-url='{{url}}'>
+        <td><strong>{{clean_name name}}</strong></td>
+        <td>{{resolution name}}</td>
+        <td>{{summary}}</td>
+        <td>{{prettyBytes size}}</td>
+        <td>{{category}}</td>
       </tr>
-      {{#each .}}
-        <tr>
-          <td></td>
-          <td>
-            <a download='{{name}}' href='{{url}}'>{{name}}</a>
-          </td>
-          <td>
-            {{summary}}
-          </td>
-          <td>
-            {{size}}
-          </td>
-          <td>
-            <a
-              title='open in geojson.io'
-              href='{{geojsonio}}'>.io</a>
-          </td>
-        </tr>
-      {{/each}}
-    {{/each}}
-  {{/each}}
-</table>
-{{/each}}
-</div>
+      <tr class='detail'>
+        <td colspan=5 class='p0 border-right border-left border-bottom'>
+          <div class='p2'>
+            <div class='col-12'>
+              <div class='col col-6'>
+                <div class='mr1 mb1'>
+                  <div class='mapbox-map'></div>
+                </div>
+              </div>
+              <div class='col col-6'>
+                <a
+                  download='{{ basename url }}'
+                  class='btn btn-primary mb1'
+                  href='{{url}}'>Download</a>
+                <a
+                  target='_blank'
+                  class='btn btn-primary mb1 bg-green'
+                  href='{{geojsonio url}}'>Open in geojson.io</a>
 
+                <label for='url'
+                  class='block'>Direct URL</label>
+                <input
+                  class='field col-12'
+                  value='{{url}}'
+                  type='text' />
+
+                <label for='mapbox'
+                  class='block mt1'>Mapbox.js</label>
+                <code><textarea
+                  name='mapbox'
+  class='field col-12'>var layer = L.mapbox.featureLayer()
+  .loadURL('{{url}}')
+  .addTo(map);</textarea></code>
+
+                <label for='leaflet'
+                  class='block mt1'>Leaflet + jQuery</label>
+                <code><textarea
+                    name='leaflet'
+  class='field col-12'>$.getJSON('{{url}}', function(data) {
+  L.geoJson(data).addTo(map);
+});</textarea></code>
+
+              </div>
+            </div>
+          </div>
+        </td>
+      </tr>
+    {{/each}}
+  </table>
+  {{/each}}
+  </div>
+  <div class='py2'>
+    geojson-xyz takes open geographic data and makes it easier to consume,
+    by providing it over CORS-enabled HTTP endpoints and through a command-line
+    utility. We use existing data sources, including <a href='http://www.naturalearthdata.com/'>
+      Natural Earth</a> data.
+  </div>
+  <div class='py2 mb4 center'>
+    <a href='https://github.com/geojson-xyz'>contribute on github: the geojson-xyz organization</a>
+  </div>
+</div>
+<script src='http://code.jquery.com/jquery-2.0.0.min.js'></script>
+<script>
+$('.detail').css('display', 'none');
+L.mapbox.accessToken = 'pk.eyJ1IjoidG1jdyIsImEiOiJjaWdzazRjMTkwNGV5dTZtMWN2OGtveXJyIn0.unkh3J737agc1s2Bek7h_Q';
+$('.row').on('click', function(e) {
+    $('.detail').css('display', 'none');
+    $('.mapbox-target').html('');
+    $(this).next().css('display', 'table-row');
+    var div = $(this).next().find('.mapbox-map');
+    div.css('opacity', 0.5);
+    var map = L.mapbox.map(div[0], 'tmcw.o4cdiodm');
+    L.mapbox.featureLayer()
+      .loadURL($(this).data('url'))
+      .on('ready', function() {
+        div.css('opacity', 1);
+        map.fitBounds(this.getBounds());
+        this.eachLayer(function(layer) {
+          layer.bindPopup('<table>' +
+            Object.keys(layer.feature.properties)
+              .map(function(key) {
+                return '<tr><td>' + key + '</td><td>' +
+                layer.feature.properties[key] + '</td></tr>';
+              }).join('') + '</table>');
+        });
+      })
+      .addTo(map);
+});
+</script>
 </body>
 </html>

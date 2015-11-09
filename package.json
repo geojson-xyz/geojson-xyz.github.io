@@ -24,7 +24,7 @@
   },
   "homepage": "https://github.com/geojson-xyz/geojson.xyz#readme",
   "dependencies": {
-    "geojson-xyz-data": "^1.0.3",
+    "geojson-xyz-data": "^2.0.0",
     "handlebars": "^4.0.3",
     "pretty-bytes": "^2.0.1"
   }
