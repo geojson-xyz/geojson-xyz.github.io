@@ -4,6 +4,12 @@ var metadata = require('geojson-xyz-data'),
   prettyBytes = require('pretty-bytes'),
   fs = require('fs');
 
+for (var s in metadata) {
+  metadata[s].files.forEach(function (file) {
+    file.url = file.url.replace('http://geojson.xyz/', 'https://d2ad6b4ur7yvpq.cloudfront.net/');
+  });
+}
+
 Handlebars.registerHelper('clean_name', function(text) {
   return new Handlebars.SafeString(text
     .replace(/ne_(\d+)m_/, '')
