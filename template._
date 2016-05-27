@@ -38,7 +38,7 @@
   </style>
 </head>
 <body>
-<div class='container px2 overflow-hidden'>
+<div class='px2 overflow-hidden'>
   <div class='border-bottom'>
     <h1>
       geojson.xyz</a>
@@ -52,21 +52,32 @@
     </p>
   </div>
   <div class='py1'>
-  {{#each metadata}}
-  {{#with meta}}
-    <h3><a href='{{website}}'>{{attribution}}</a> ({{license}})</h3>
-  {{/with}}
-  <table class='table-light'>
-    {{#each files}}
-      <tr class='row' data-url='{{url}}'>
-        <td><strong>{{clean_name name}}</strong></td>
-        <td>{{resolution name}}</td>
-        <td>{{summary}}</td>
-        <td>{{prettyBytes size}}</td>
-        <td>{{category}}</td>
+  <% sources.forEach(function (source) { %>
+    <h3><a href='<%= source.meta.website %>'><%= source.meta.attribution %></a>
+      (<%= source.meta.license %>)</h3>
+    <table class='table-light'>
+    <% source.files.forEach(function(file) { %>
+      <tr class='row' data-url='<%=file.url%>'>
+        <td><strong><%=cleanName(file.name)%></strong></td>
+        <td><%=resolution(file.name)%></td>
+        <td><%=file.summary%></td>
+        <td><%=prettyBytes(file.size)%></td>
+        <td><%=file.category%></td>
+        <td><input
+          class='field col-12'
+          value='<%=file.url%>'
+          type='text' /></td>
+        <td><a
+          download='<%= basename(file.url) %>'
+          class='btn btn-primary mb1'
+          href='<%=file.url%>'>download</a></td>
+        <td><a
+          target='_blank'
+          class='btn btn-primary mb1 bg-green'
+          href='<%=geojsonio(file.url)%>'>geojson.io</a></td>
       </tr>
       <tr class='detail'>
-        <td colspan=5 class='p0 border-right border-left border-bottom'>
+        <td colspan=8 class='p0 border-right border-left border-bottom'>
           <div class='p2'>
             <div class='col-12'>
               <div class='col col-6'>
@@ -76,19 +87,19 @@
               </div>
               <div class='col col-6'>
                 <a
-                  download='{{ basename url }}'
+                  download='<%= basename(file.url) %>'
                   class='btn btn-primary mb1'
-                  href='{{url}}'>Download</a>
+                  href='<%=file.url%>'>Download</a>
                 <a
                   target='_blank'
                   class='btn btn-primary mb1 bg-green'
-                  href='{{geojsonio url}}'>Open in geojson.io</a>
+                  href='<%=geojsonio(file.url)%>'>Open in geojson.io</a>
 
                 <label for='url'
                   class='block'>Direct URL</label>
                 <input
                   class='field col-12'
-                  value='{{url}}'
+                  value='<%=file.url%>'
                   type='text' />
 
                 <label for='mapbox'
@@ -96,14 +107,14 @@
                 <code><textarea
                   name='mapbox'
   class='field col-12'>var layer = L.mapbox.featureLayer()
-  .loadURL('{{url}}')
+  .loadURL('<%=file.url%>')
   .addTo(map);</textarea></code>
 
                 <label for='leaflet'
                   class='block mt1'>Leaflet + jQuery</label>
                 <code><textarea
                     name='leaflet'
-  class='field col-12'>$.getJSON('{{url}}', function(data) {
+  class='field col-12'>$.getJSON('<%=file.url%>', function(data) {
   L.geoJson(data).addTo(map);
 });</textarea></code>
 
@@ -112,9 +123,9 @@
           </div>
         </td>
       </tr>
-    {{/each}}
+      <% }) %>
   </table>
-  {{/each}}
+  <% }) %>
   </div>
   <div class='py2'>
     geojson-xyz takes open geographic data and makes it easier to consume,
